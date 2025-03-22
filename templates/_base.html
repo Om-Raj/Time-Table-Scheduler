@@ -19,7 +19,7 @@
                     <a class="nav-link {% block nav_link_home_status %}{% endblock nav_link_home_status %}" aria-current="page" href="{% url "home" %}">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link {% block nav_link_about_status %}{% endblock nav_link_about_status %}" href="#">About</a>
+                    <a class="nav-link {% block nav_link_scheduler_status %}{% endblock nav_link_scheduler_status %}" href="{% url "scheduler_home" %}">Scheduler</a>
                     </li>
                 </ul>
                 {% if user.is_authenticated %}
