@@ -13,7 +13,7 @@ class TimeTable(models.Model):
     organization = models.ForeignKey(to=Organization, on_delete=models.CASCADE)
     year = models.PositiveSmallIntegerField(validators=(
         MinValueValidator(limit_value=1900, message='Year cannot be less than 1900'),
-        MinValueValidator(limit_value=2100, message='Year cannot be more than 2100'),
+        MaxValueValidator(limit_value=2100, message='Year cannot be more than 2100'),
     ))
     semester = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_created=True)
