@@ -18,6 +18,9 @@ class TimeTable(models.Model):
     semester = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_created=True)
 
+    def __str__(self):
+        return f"{self.organization.name} - {self.year} - {self.semester}"
+
 
 class Slot(models.Model):
     time_table = models.ForeignKey(to=TimeTable, on_delete=models.CASCADE)
@@ -27,3 +30,6 @@ class Slot(models.Model):
     faculty = models.ForeignKey(to=Faculty, null=True, on_delete=models.SET_NULL)
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.date_time_slot} - {self.room} - {self.faculty} - {self.course} - {self.group}"
