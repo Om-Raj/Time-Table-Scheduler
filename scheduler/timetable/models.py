@@ -35,17 +35,20 @@ class TimeTable(models.Model):
         super().save(*args, **kwargs)
 
 
-# TODO: Should be Section instead
-class Slot(models.Model):
-    time_table = models.ForeignKey(to=TimeTable, on_delete=models.CASCADE)
-    date_time_slot = models.ForeignKey(to=DateTimeSlot, null=True, on_delete=models.SET_NULL)
-    duration = models.PositiveSmallIntegerField(blank=True, default=1)
-    room = models.ForeignKey(to=Room, null=True, on_delete=models.SET_NULL)
+class Section(models.Model):
+    timetable = models.ForeignKey(to=TimeTable, on_delete=models.CASCADE)
     faculty = models.ForeignKey(to=Faculty, null=True, on_delete=models.SET_NULL)
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
+    duration = models.PositiveSmallIntegerField(blank=True, default=1)
 
     def __str__(self):
-        return f"{self.date_time_slot} - {self.room} - {self.faculty} - {self.course} - {self.group}"
+        return f"{self.course} - {self.group} - {self.faculty}"
 
-# TODO: Slot model will have [ Section(One-to-One), Room, DateTimeSlot ]
+class Slot(models.Model):
+    section = models.OneToOneField(to=Section, on_delete=models.CASCADE)
+    room = models.ForeignKey(to=Room, null=True, on_delete=models.SET_NULL)
+    date_time_slot = models.ForeignKey(to=DateTimeSlot, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f"{self.date_time_slot} - {self.room} - {self.section}"

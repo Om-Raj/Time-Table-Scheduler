@@ -10,12 +10,11 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("organization", "0001_initial"),
-        ("scheduler", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name="Faculty",
+            name="DateTimeSlot",
             fields=[
                 (
                     "id",
@@ -26,9 +25,8 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("faculty_id", models.CharField(max_length=10)),
-                ("name", models.CharField(max_length=100)),
-                ("priority", models.SmallIntegerField()),
+                ("day", models.PositiveSmallIntegerField()),
+                ("time", models.PositiveSmallIntegerField()),
                 (
                     "organization",
                     models.ForeignKey(
@@ -36,10 +34,9 @@ class Migration(migrations.Migration):
                         to="organization.organization",
                     ),
                 ),
-                ("slot_choices", models.ManyToManyField(to="scheduler.datetimeslot")),
             ],
             options={
-                "unique_together": {("organization", "faculty_id")},
+                "unique_together": {("organization", "day", "time")},
             },
         ),
     ]

@@ -1,15 +1,15 @@
 {% extends "_base.html" %}
 
-{% block title %}Create Slot{% endblock %}
+{% block title %}Create Section{% endblock %}
 
 {% block content %}
-<h1 class="display-4">Add Slot</h1>
+<h1 class="display-4">Add Section</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-primary">Create Slot</button>
+    <button type="submit" class="btn btn-primary">Create Section</button>
     <a href="{% url 'timetable_detail' org_id=org_id timetable_id=timetable_id %}" class="btn btn-secondary">Back to Timetable</a>
 </form>
 
