@@ -1,0 +1,80 @@
+{% extends "_base.html" %}
+{% load dict_extras %}
+
+{% block title %}{{ timetable.organization.name }}{% endblock title %}
+
+{% block style %}
+<style>
+    .timetable-table th,
+    .timetable-table td {
+        width: 120px;      /* Adjust as needed */
+        height: 100px;     /* Adjust as needed */
+        vertical-align: middle;
+        text-align: center;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="display-5 text-center">Schedule for {{ timetable.organization.name }} - Time Table</h2>
+
+    <div class="card shadow-sm p-4 mt-4">
+        <h4 class="text-primary">Details</h4>
+        <p><strong>📅 Year:</strong> {{ timetable.year }}</p>
+        <p><strong>📖 Semester:</strong> {{ timetable.semester }}</p>
+        <a class="btn btn-primary" href="{% url "timetable_detail" org_id=timetable.organization.id timetable_id=timetable.timetable_id %}">Go back</a>
+    </div>
+
+    <h3 class="mt-5">📌 Scheduled Timetable</h3>
+
+    <div>
+    {% for group, timetable in group_timetable.items %}
+        <h4 class="mt-4">{{ group.group_id }}</h4>
+        <div class="table-responsive mb-5">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Day ⬇ / Time ⮕</th>
+                        {% for time in time_slots %}
+                            <th>{{ time }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in days %}
+                    <tr>
+                        <th class="table-secondary">{{ day }}</th>
+                        {% for time in time_slots %}
+                            <td>
+                                {% with slot=timetable|dict_get:day|dict_get:time %}
+                                    {% if slot %}
+                                        <strong>{{ slot.section.course.course_id }}</strong><br>
+                                        {{ slot.section.faculty.faculty_id }}<br>
+                                        {{ slot.room.room_id }}<br>
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <h4>Faculty List</h4>
+        <ul>
+            {% for faculty in faculty_list %}
+            <li>{{ faculty.faculty_id }} - {{ faculty.name }}</li>
+            {% endfor %}
+        </ul>
+    {% empty %}
+        <div class="alert alert-warning text-center">No slots available for any group.</div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock content %}
