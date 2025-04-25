@@ -184,10 +184,10 @@ class TimeTableResultView(DetailView):
         slots = Slot.objects.select_related('section__group', 'date_time_slot', 'room', 'section__course', 'section__faculty').filter(section__timetable=self.object)
 
         group_slots = defaultdict(set)
-        faculty_list = set()
+        
         for slot in slots:
             group_slots[slot.section.group].add(slot)
-            faculty_list.add(slot.section.faculty)
+           # faculty_list.add(slot.section.faculty)
 
         organization = context['timetable'].organization
         DAYS = range(1, organization.days_per_week + 1)
@@ -196,15 +196,17 @@ class TimeTableResultView(DetailView):
 
         for group, slots in group_slots.items():
             table = {day: {time: None for time in TIME} for day in DAYS}
+            faculty_list = set()
             for slot in slots:
                 day = slot.date_time_slot.day
                 time = slot.date_time_slot.time
                 table[day][time] = slot
-            group_timetable[group] = table
+                faculty_list.add(slot.section.faculty)
+            group_timetable[group] = {'table': table, 'faculty_list': faculty_list}
 
         context['days'] = DAYS
         context['time_slots'] = TIME
         context['group_timetable'] = group_timetable
-        context['faculty_list'] = faculty_list
+        #context['faculty_list'] = faculty_list
 
         return context
